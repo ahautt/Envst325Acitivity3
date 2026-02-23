@@ -207,3 +207,52 @@ ggplot(data=NewscountriesCO2,
     "Russia" = "coral3")) +
   labs(x="Year", y="Annual emissions (tons CO2)") + 
   coord_cartesian(xlim = c(1850, NA))
+
+#QUESTION 2
+#World CO2 emmissions 
+#find the avg CO2 emmissions by year
+avgCO2 <- datCO2 %>% 
+  group_by(Year) %>%
+  summarize(avg = mean(CO2))
+#graph
+ggplot(data = avgCO2,
+       aes(x = Year, y = avg) )+ 
+  geom_point( color = 'lightsteelblue3', size = 2, alpha = 0.75)+ 
+  geom_line( color = 'slateblue', linewidth = 1)+ 
+  scale_y_continuous(labels = unit_format(scale = 1e-6))+
+  labs(x="Year", y="Average CO2 Emmissions (tons)", title = "World CO Emissions") 
+
+#World Temperature anomalies 
+# find avg temp anomaly per year for all hemispheres
+worldAnomalies <- datClimateChange %>%
+  mutate(Year = year(date)) %>%
+  group_by(Year) %>%
+  summarize(avg = mean(temperature_anomaly))
+
+ggplot(data = worldAnomalies,
+       aes(x = Year, y = avg) )+ 
+  geom_point( color = 'pink3', size = 3, alpha = 1)+ 
+  geom_line( color = 'violetred', linewidth = 1)+ 
+  geom_hline(yintercept = 0, linetype = 2, color = 'pink3', linewidth = 0.5)+
+  labs(x="Year", y="Average Air Temperature Anomaly (°C)", title = "World Air Temperature Anomalies") 
+
+#Question 3
+#load in data
+datFreshWater <- read.csv("/cloud/project/freshwater-withdrawals-as-a-share-of-internal-resources.csv")
+#fix super long variable name
+colnames(datFreshWater)[ncol(datFreshWater)] <- "WaterStress"
+
+# create new data frame of averages by year
+avgFreshWater <- datFreshWater %>% 
+  group_by(Year) %>%
+  summarize(avg = mean(WaterStress))
+
+#graph
+ggplot(data = avgFreshWater,
+       aes(x = Year, y = avg) )+ 
+  geom_point( color = 'pink3', size = 3, alpha = 1)+ 
+  geom_line( color = 'violetred', linewidth = 1)+ 
+  labs(x="Year", y="percent of resources", title = "Average World Freshwater withdrawals as a share of internal resources")
+
+
+
