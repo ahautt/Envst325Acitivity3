@@ -167,7 +167,7 @@ ggplot(data = Hemispheres,
   geom_point()+ # make points at data point
   geom_line()+ # use lines to connect data points
   scale_color_manual(values=c("salmon","darkgoldenrod3")) +
-  labs(x="Year", y="temperature anomaly (Degrees Celcius") 
+  labs(x="Year", y="temperature anomaly (Degrees Celcius)") 
 
 #PROMPT 2
 
@@ -175,3 +175,35 @@ totalCO2 <- NorthA %>%
   group_by(Entity) %>%
   summarize( total = sum(CO2))
 
+ggplot( data = totalCO2,
+        aes( x = Entity, y = total, fill = Entity)) +
+  geom_col() +
+  scale_fill_manual(values = c(
+    "Canada" = "palevioletred",
+    "Mexico" = "paleturquoise3",
+    "United States" = "palegreen4"
+  )) +
+  labs(x = "Country", y="total CO2 emmissions(tonnes)", title = "Total All Time Tonnes of CO2 Emmissions by North American Countries")
+
+
+#HOMEWORK 
+#QUESTION 1
+
+
+NewscountriesCO2 <- datCO2[datCO2$Entity == "United States" |
+                   datCO2$Entity == "China" |
+                   datCO2$Entity == "India" | 
+                   datCO2$Entity == "Russia" , ]
+unique(NewscountriesCO2$Entity)
+
+
+ggplot(data=NewscountriesCO2,
+       aes(x=Year,y =CO2, color =Entity))+ 
+  geom_line(linewidth = 1.5)+ 
+  scale_color_manual(values = c(
+    "United States" = "palevioletred",
+    "China" = "paleturquoise3",
+    "India" = "palegreen4",
+    "Russia" = "coral3")) +
+  labs(x="Year", y="Annual emissions (tons CO2)") + 
+  coord_cartesian(xlim = c(1850, NA))
